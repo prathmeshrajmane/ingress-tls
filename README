@@ -1,0 +1,38 @@
+minikube addons enable ingress
+
+kubectl get pods -n ingress-nginx
+
+kubectl create deployment web --image=gcr.io/google-samples/hello-app:1.0
+
+kubectl expose deployment web --type=NodePort --port=8080
+
+kubectl create deployment web2 --image=gcr.io/google-samples/hello-app:2.0
+
+kubectl expose deployment web2 --port=8080 --type=NodePort
+
+kubectl get service web
+
+minikube service web --url
+
+curl http://
+
+# make sure TLS cert created first #
+apply ingress using file in root
+
+kubectl apply -f tlsingress.yaml
+
+minikube ip or k get ing
+
+copy host & ip to /etc/hosts
+
+172.17.0.15 hello-world.info
+
+
+####### Create TLS cert ##########
+
+mkdir certs
+openssl req -x509 -nodes -days 9999 -newkey rsa:2048 -keyout certs/ingress-tls.key -out certs/ingress-tls.crt
+
+kubectl create secret tls ingress-cert --key=certs/ingress-tls.key --cert=certs/ingress-tls.crt -o yaml
+
+k get secret
